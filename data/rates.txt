@@ -1,0 +1,4 @@
+Rate(M1, Military)
+Rate(M2, Military)
+Rate(S1, Senior)
+Rate(S2, Senior)
