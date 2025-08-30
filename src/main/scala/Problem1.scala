@@ -4,7 +4,7 @@ import tst.models.CabinPrice
 import tst.models.BestGroupPrice
 
 
-@main def main(): Unit = {
+@main def problem1(): Unit = {
   // For read errors in this case we want the exception
   val rates       = Readers.rates("data/rates.txt").get
   val cabinPrices = Readers.cabinPrices("data/cabin-prices.txt").get

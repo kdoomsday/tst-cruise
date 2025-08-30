@@ -5,6 +5,7 @@ import scala.util.Try
 import scala.util.Using
 import tst.models.Rate
 import tst.models.CabinPrice
+import tst.models.Promotion
 
 
 object Readers {
@@ -45,25 +46,30 @@ object Readers {
     dataReader(filename, textToCabinPrice)
 
 
+  /** Load promotions */
+  @inline
+  def promotions(filename: String): Try[Seq[Promotion]] =
+    dataReader(filename, textToPromotion)
+
+
   /**
-   * Read a [[Rate]] from text
+   * Parse a [[Rate]] from text
    *
    * @param text Text to extract the rate from
    * @return A [[Rate]] if it could be parsed from the line, or empty if not
    */
   private def textToRate(text: String): Option[Rate] = {
-    val rate = """Rate\((.*?), (.*)\)""".r("rateCode", "rateGroup")
+    val rate = """Rate\((?<rateCode>.*?), (?<rateGroup>.*)\)""".r
     rate.findFirstMatchIn(text).map { matcher =>
       Rate(matcher.group("rateCode"), matcher.group("rateGroup"))
     }
   }
 
 
-  /** Read a [[CabinPrice]] from text. If the price does not parse it will be empty */
+  /** Parse a [[CabinPrice]] from text. If the price does not parse it will be empty */
   private def textToCabinPrice(text: String): Option[CabinPrice] = {
     val cabinPrice =
-      """CabinPrice\((.*?), (.*?), (.*?)\)"""
-        .r("cabinCode", "rateCode", "price")
+      """CabinPrice\((?<cabinCode>.*?), (?<rateCode>.*?), (?<price>.*?)\)""".r
 
     cabinPrice.findFirstMatchIn(text).flatMap { matcher =>
       Try(BigDecimal(matcher.group("price"))).toOption.map { case price =>
@@ -73,6 +79,18 @@ object Readers {
           price
         )
       }
+    }
+  }
+
+
+  /** Parse a [[Promotion]] from text */
+  private def textToPromotion(text: String): Option[Promotion] = {
+    val promotion = """Promotion\((?<code>.*?), Seq\((?<nonCombine>.*)\)\).*""".r
+
+    promotion.findFirstMatchIn(text).map { matcher =>
+      val nonCombines = matcher.group("nonCombine").split(",").map(_.trim).toSeq
+
+      Promotion(matcher.group("code"), nonCombines)
     }
   }
 
