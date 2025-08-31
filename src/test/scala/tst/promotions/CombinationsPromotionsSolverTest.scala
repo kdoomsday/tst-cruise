@@ -1,0 +1,4 @@
+package tst.promotions
+
+class CombinationsPromotionsSolverTest extends PromotionsSolverBase(CombinationsPromotionsSolver)
+

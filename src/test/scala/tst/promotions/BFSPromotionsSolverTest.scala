@@ -1,0 +1,3 @@
+package tst.promotions
+
+class BFSPromotionsSolverTest extends PromotionsSolverBase(BFSPromotionsSolver)
