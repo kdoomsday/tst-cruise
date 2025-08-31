@@ -4,29 +4,31 @@ import tst.models.CabinPrice
 import tst.models.BestGroupPrice
 
 
-@main def problem1(): Unit = {
-  // For read errors in this case we want the exception
-  val rates       = Readers.rates("data/rates.txt").get
-  val cabinPrices = Readers.cabinPrices("data/cabin-prices.txt").get
+object Problem1 {
+  def main(args: Array[String]): Unit = {
+    // For read errors in this case we want the exception
+    val rates       = Readers.rates("data/rates.txt").get
+    val cabinPrices = Readers.cabinPrices("data/cabin-prices.txt").get
 
-  bestPrices(rates, cabinPrices).foreach(println)
-}
+    bestPrices(rates, cabinPrices).foreach(println)
+  }
 
+  /** Best Cabin Prices given the data */
+  def bestPrices(rates: Seq[Rate], cabinPrices: Seq[CabinPrice]): Seq[BestGroupPrice] = {
+    val matchingRates: Seq[(Rate, CabinPrice)] = for {
+      rate       <- rates
+      cabinPrice <- cabinPrices
+      if (rate.rateCode == cabinPrice.rateCode)
+    } yield (rate, cabinPrice)
 
-/** Best Cabin Prices given the data */
-def bestPrices(rates: Seq[Rate], cabinPrices: Seq[CabinPrice]): Seq[BestGroupPrice] = {
-  val matchingRates: Seq[(Rate, CabinPrice)] = for {
-    rate       <- rates
-    cabinPrice <- cabinPrices
-    if (rate.rateCode == cabinPrice.rateCode)
-  } yield (rate, cabinPrice)
+    matchingRates
+      .map { case (rate, price) =>
+        BestGroupPrice(price.cabinCode, rate.rateCode, price.price, rate.rateGroup)
+      }
+      .groupBy(bgp => (bgp.cabinCode, bgp.rateGroup))
+      .flatMap { case (_, prices) => prices.minByOption(_.price) }
+      .toSeq
+      .sortBy(bgp => (bgp.cabinCode, bgp.rateGroup))
+  }
 
-  matchingRates
-    .map { case (rate, price) =>
-      BestGroupPrice(price.cabinCode, rate.rateCode, price.price, rate.rateGroup)
-    }
-    .groupBy(bgp => (bgp.cabinCode, bgp.rateGroup))
-    .flatMap { case (_, prices) => prices.minByOption(_.price) }
-    .toSeq
-    .sortBy(bgp => (bgp.cabinCode, bgp.rateGroup))
 }

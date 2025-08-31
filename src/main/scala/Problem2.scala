@@ -4,7 +4,7 @@ import tst.models.Promotion
 import scala.annotation.tailrec
 
 
-object problem2 {
+object Problem2 {
 
   def main(args: Array[String]): Unit = {
     val allPromotions = Readers.promotions("data/promotions.txt").get

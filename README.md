@@ -18,7 +18,7 @@ All input data is in `src/main/resources`
 Each problem can be run on its own:
 
 ```bash
-sbt "runMain problem1"    # Print all Best Group Prices
-sbt "runMain problem2"    # Print all PromotionCombos, combos for P1, and combos for P3
-sbt "runMain problem2 P2" # Print only combos for P2
+sbt "runMain Problem1"    # Print all Best Group Prices
+sbt "runMain Problem2"    # Print all PromotionCombos, combos for P1, and combos for P3
+sbt "runMain Problem2 P2" # Print only combos for P2
 ```
