@@ -11,7 +11,7 @@ class Problem1Tests extends munit.FunSuite {
     val rates = Seq(Rate("M1", "Military"))
     val prices = Seq(CabinPrice("CA", "M1", BigDecimal("200.00")))
 
-    val res = Problem1.bestPrices(rates, prices)
+    val res = Problem1.getBestGroupPrices(rates, prices)
     assertEquals(res.size, 1)
     assertEquals(res.head, BestGroupPrice("CA", "M1", BigDecimal("200.00"), "Military"))
   }
@@ -20,12 +20,12 @@ class Problem1Tests extends munit.FunSuite {
     val rates = Seq(Rate("M1", "Military"))
     val prices = Seq(CabinPrice("CA", "S1", BigDecimal("225.00")))
 
-    val res = Problem1.bestPrices(rates, prices)
+    val res = Problem1.getBestGroupPrices(rates, prices)
     assert(res.isEmpty)
   }
 
   test("problem 1 input test") {
-    val res = Problem1.bestPrices(rates, cabinPrices)
+    val res = Problem1.getBestGroupPrices(rates, cabinPrices)
 
     assertEquals(res.size, 4)
     assert(res.contains(BestGroupPrice("CA", "M1", BigDecimal("200.00"), "Military")))

@@ -10,11 +10,11 @@ object Problem1 {
     val rates       = Readers.rates("data/rates.txt").get
     val cabinPrices = Readers.cabinPrices("data/cabin-prices.txt").get
 
-    bestPrices(rates, cabinPrices).foreach(println)
+    getBestGroupPrices(rates, cabinPrices).foreach(println)
   }
 
   /** Best Cabin Prices given the data */
-  def bestPrices(rates: Seq[Rate], cabinPrices: Seq[CabinPrice]): Seq[BestGroupPrice] = {
+  def getBestGroupPrices(rates: Seq[Rate], cabinPrices: Seq[CabinPrice]): Seq[BestGroupPrice] = {
     val matchingRates: Seq[(Rate, CabinPrice)] = for {
       rate       <- rates
       cabinPrice <- cabinPrices
