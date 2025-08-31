@@ -9,40 +9,10 @@ object problem2 {
   def main(args: Array[String]): Unit = {
     val allPromotions = Readers.promotions("data/promotions.txt").get
 
-    val start = System.nanoTime()
-    val solutions = allCombinablePromotions(allPromotions)
-    val end = System.nanoTime()
-
-    solutions.foreach(println)
-    println(s"Solution took ${end-start} ns")
+    if (args.isEmpty) printAll(allPromotions)
+    else printPromotions(args(0), allPromotions)
   }
 
-
-  /** All Promotion Combos for a given Promotion Code */
-  def combinablePromotions(
-      promotionCode: String,
-      allPromotions: Seq[Promotion]
-  ): Seq[PromotionCombo] =
-    allCombinablePromotions(allPromotions)
-      .filter(_.promotionCodes.contains(promotionCode))
-
-
-  /** Print all promotions, as well as combinable for P1 and P3 */
-  def printAll(allPromotions: Seq[Promotion]): Unit = {
-    allCombinablePromotions(allPromotions).foreach(println)
-    println("---")
-    printPromotions("P1", allPromotions)
-    println("---")
-    printPromotions("P3", allPromotions)
-  }
-
-
-  /** print combinable promotions for a specific promotion code */
-  def printPromotions(promotionCode: String, allPromotions: Seq[Promotion]): Unit = {
-    println(s"Combos for $promotionCode:")
-    combinablePromotions("P1", allPromotions)
-      .foreach(combo => println(s"\t$combo"))
-  }
 
 
   /**
@@ -60,6 +30,8 @@ object problem2 {
 
 
   def allCombinablePromotions(allPromotions: Seq[Promotion]): Seq[PromotionCombo] = {
+    // Generate new solutions from existing solutions
+    // All solutions that do not generate something new become fixed
     @tailrec
     def solveFor(acc: Set[Solution], fixed: Set[Solution]): Set[Solution] = {
       val newSolutions = // All valid new solutions from previous solutions
@@ -94,4 +66,30 @@ object problem2 {
       .toSeq
   }
 
+
+  /** All Promotion Combos for a given Promotion Code */
+  def combinablePromotions(
+      promotionCode: String,
+      allPromotions: Seq[Promotion]
+  ): Seq[PromotionCombo] =
+    allCombinablePromotions(allPromotions)
+      .filter(_.promotionCodes.contains(promotionCode))
+
+
+  /** Print all promotions, as well as combinable for P1 and P3 */
+  def printAll(allPromotions: Seq[Promotion]): Unit = {
+    allCombinablePromotions(allPromotions).foreach(println)
+    println("---")
+    printPromotions("P1", allPromotions)
+    println("---")
+    printPromotions("P3", allPromotions)
+  }
+
+
+  /** print combinable promotions for a specific promotion code */
+  def printPromotions(promotionCode: String, allPromotions: Seq[Promotion]): Unit = {
+    println(s"Combos for $promotionCode:")
+    combinablePromotions("P1", allPromotions)
+      .foreach(combo => println(s"\t$combo"))
+  }
 }
