@@ -28,6 +28,9 @@ object BFSPromotionsSolver extends PromotionsSolver {
      * All solutions that do not generate something new become fixed as they can
      * no longer be improved
      *
+     * The process should start with a solution with empty codes, and all
+     * Promotions available in order to search the full space
+     *
      * @param acc Current solution space
      * @param fixed Solutions found that can no longer improve
      * @return All optimal solutions
@@ -43,22 +46,14 @@ object BFSPromotionsSolver extends PromotionsSolver {
       if (newSolutions.isEmpty) fixed ++ acc
       else {
         // Solutions that were not improved here will also not be improved further
-        val newFixed =
+        val notImproved =
           acc.filterNot(s => newSolutions.exists(newS => s.codes.subsetOf(newS.codes)))
 
-        solveFor(newSolutions, fixed ++ newFixed)
+        solveFor(newSolutions, fixed ++ notImproved)
       }
     }
 
-    val promotionsSet = allPromotions.toSet
-
-    // Start with solutions for each promotion on its own
-    val singleSolutions =
-      allPromotions
-        .map(p => Solution(Set(p.code), newAvailable(p, promotionsSet)))
-        .toSet
-
-    solveFor(singleSolutions, Set.empty)
+    solveFor(Set(Solution(Set.empty, allPromotions.toSet)), Set.empty)
       .map(sol => PromotionCombo(sol.codes.toSeq))
       .toSeq
   }
