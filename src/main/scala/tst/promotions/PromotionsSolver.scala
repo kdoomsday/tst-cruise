@@ -6,6 +6,7 @@ import tst.models.PromotionCombo
 
 
 trait PromotionsSolver {
+  def tag: String
 
   /**
    * Find all [[PromotionCombo]] with maximum number of combinable promotions

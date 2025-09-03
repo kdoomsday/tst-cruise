@@ -9,6 +9,8 @@ import scala.annotation.tailrec
 
 object BFSPromotionsSolver extends PromotionsSolver {
 
+  override def tag: String = "BFS"
+
   /**
    * Model a solution in progress
    *

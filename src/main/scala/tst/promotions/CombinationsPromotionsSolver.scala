@@ -12,6 +12,9 @@ import tst.models.PromotionCombo
  */
 object CombinationsPromotionsSolver extends PromotionsSolver {
 
+  override def tag: String = "Combinations"
+
+
   override def allCombinablePromotions(
       allPromotions: Seq[Promotion]
   ): Seq[PromotionCombo] = {
